@@ -1,0 +1,123 @@
+import java.util.Scanner;
+public class Route {
+static int total = 0;
+public static String cityName(int vertex) {
+String city ="";
+if(vertex == 0) {
+city = "Bangalore";
+}else if(vertex == 1) {
+city = "Mysore";
+}else if(vertex == 2) {
+city = "Tumkur";
+}else if(vertex == 3) {
+city = "Hassan";
+}else if(vertex == 4) {
+city = "Davangere";
+}else if(vertex == 5) {
+city = "Mandya";
+}else if(vertex == 6) {
+city = "Shivamogga";
+}else if(vertex == 7) {
+city = "Chikkamagaluru";
+}else if(vertex == 8) {
+city = "Ballari";
+
+}else if(vertex == 9) {
+city = "Madikeri";
+}else if(vertex == 10) {
+city = "Karawar";
+}else if(vertex == 11) {
+city = "Mangalore";
+}
+return city;
+}
+public static void dijkstra(int[][] graph, int sourceVertex, int destinationVertex) {
+int vertexCount = graph.length;
+boolean[] visitedVertex = new boolean[vertexCount];
+int[] distance = new int[vertexCount];
+for (int i = 0; i < vertexCount; i++) {
+visitedVertex[i] = false;
+distance[i] = Integer.MAX_VALUE;
+}
+distance[sourceVertex] = 0;
+for (int i = 0; i < vertexCount; i++) {
+int u = findMinDistance(distance, visitedVertex);
+visitedVertex[u] = true;
+for (int v = 0; v < vertexCount; v++) {
+if (!visitedVertex[v] && graph[u][v] != 0 && (distance[u] + 
+graph[u][v] < distance[v])) {
+distance[v] = (int) (distance[u] + graph[u][v]);
+}
+}
+
+}
+System.out.println(String.format("Distance from %s to %s is %s kms", 
+cityName(sourceVertex),
+cityName(destinationVertex), distance[destinationVertex]));
+total += distance[destinationVertex];
+}
+private static int findMinDistance(int[] distance, boolean[] visitedVertex) {
+int minDistance = Integer.MAX_VALUE;
+int minDistanceVertex = -1;
+for (int i = 0; i < distance.length; i++) {
+if (!visitedVertex[i] && distance[i] < minDistance) {
+minDistance = distance[i];
+minDistanceVertex = i;
+}
+}
+return minDistanceVertex;
+}
+public static void main(String[] args) {
+int graph[][] = new int[][] {
+{0, 0, 69, 171, 0, 99, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 111, 0, 45, 0, 0, 0, 118, 0, 0},
+{69, 0, 0, 149, 193, 110, 233, 171, 266, 0, 0, 0},
+{171, 111, 149, 0, 0, 0, 0, 0, 0, 103, 0, 171},
+{0, 0, 193, 0, 0, 0, 91, 0, 159, 0, 0, 0},
+{99, 45, 110, 0, 0, 0, 238, 0, 0, 0, 0, 0},
+{0, 0, 233, 0, 91, 238, 0, 0, 243, 0, 251, 0},
+{0, 0, 171, 0, 0, 0, 0, 0, 0, 0, 0, 150},
+
+{0, 0, 266, 0, 159, 0, 243, 0, 0, 0, 372, 0},
+{0, 118, 0, 103, 0, 0, 0, 0, 0, 0, 0, 137},
+{0, 0, 0, 0, 0, 0, 251, 0, 372, 0, 0, 272},
+{0, 0, 0, 171, 0, 0, 0, 150, 0, 137, 272, 0}
+};
+int src,last = 0,dest,ch = 1;
+int i = 0;
+int flag = 1;
+int[] stop = new int [11];
+Scanner scan = new Scanner(System.in);
+System.out.println("Cities:\n1.Bangalore \n2.Mysore \n3.Tumkur \n4.Hassan"+ 
+"\n5.Davangere \n6.Mandya\n7.Shivamogga\n8.Chikkamagluru"+ "\n9.Ballari \n10.Madikeri \n11.Karwar \n12.Mangalore");
+System.out.println("Enter your starting point");
+src = scan.nextInt() - 1;
+System.out.println("Enter your end point");
+dest = scan.nextInt() - 1;
+while(ch != 0){
+System.out.println("Do you want to add stops?(enter 1 for yes, 0 for no)");
+ch = scan.nextInt();
+if(ch == 0)
+break;
+System.out.println("Cities:\n1.Bangalore\n2.Mysore\n3.Tumkur\n4.Hassan"+ 
+"\n5.Davangere \n6.Mandya\n7.Shivamogga\n8.Chikkamagluru"+ "\n9.Ballari \n10.Madikeri \n11.Karwar \n12.Mangalore");
+System.out.println("\nEnter extra stop");
+stop[i] = scan.nextInt() - 1;
+if(i==0)
+
+dijkstra(graph, src, stop[i]);
+else
+dijkstra(graph, stop[i-1], stop[i]);
+flag = 0;
+last = stop[i];
+i++;
+}
+if(flag == 1)
+dijkstra(graph, src, dest);
+else {
+dijkstra(graph, last, dest);
+System.out.println("Total distance is "+ total);
+}
+}
+}
+
